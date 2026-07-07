@@ -1,6 +1,6 @@
 # Search Skills
 
-> **Room:** Search Skills
+> **Room:** Search Skills  
 > **Learning Path:** Start Your Cyber Security Journey
 
 ---
