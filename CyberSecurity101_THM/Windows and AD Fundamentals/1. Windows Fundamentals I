@@ -1,0 +1,281 @@
+# Windows Fundamentals Part 1
+
+> **Room:** Windows Fundamentals 1  
+> **Learning Path:** Cyber Security 101 / Windows and AD Fundamentals
+
+---
+
+# Room Objective
+
+Introduction to the history and foundational architecture of the Windows operating system, navigating the desktop environment, understanding the NTFS file system, managing User Account Control (UAC), and utilizing administrative tools like the Control Panel.
+
+---
+
+# Skills Learned
+
+- Windows OS History & Lifecycle Management
+- Desktop Environment Navigation
+- NTFS File System Architecture
+- User Account Control (UAC) Mechanics
+- System Administration & Security Configurations
+- Directory Structure Auditing & System Variables
+- Local User & Group Identity Management
+- Interface Configuration Management
+- Process and Resource Tracking Engine Operations
+
+---
+
+# Tools Used
+
+- TryHackMe In-Browser AttackBox
+- Windows Server 2019 Standard Virtual Machine
+- Windows System Utilities (System Information, Settings, Control Panel, Task Manager)
+- Microsoft Management Consoles (`lusrmgr.msc`)
+
+---
+
+# Task 1 – Windows Editions
+
+## Objective
+
+Analyze the historical evolution of the Windows operating system, lifecycle management policies, and feature differences between consumer and corporate editions.
+
+## Key Concepts
+
+- **OS Lifecycle Vulnerabilities**: Due to its massive footprint in enterprise and consumer spaces, Windows remains a primary target for malware authors and security researchers.
+- **Enterprise Legacy Shifts**: Historical end-of-life (EOL) milestones (e.g., Windows XP to Windows 7 transitions) demonstrate how enterprise vendors must continuously audit compatibility to prevent architectural gaps.
+- **Feature Segregation**: Corporate/Professional variations pack advanced cryptographic defenses absent from baseline consumer home installations.
+
+## What I Learned
+
+- Windows 11 represents the current client desktop operating standard, structured across distinct Home and Pro deployment paths.
+- Windows Server 2019 Standard served as the specific deployment VM for this practical lab environment.
+- Microsoft enforces explicit operational support sunsets, signaling the necessity for scheduled infrastructure migration cycles.
+
+---
+
+# Task 2 – The Desktop (GUI)
+
+## Objective
+
+Navigate, configure, and customize the Windows Graphical User Interface (GUI) and its core interface components.
+
+## Key Concepts
+
+- **Authentication Gateways**: Users must clear a secure login screen with local or Active Directory (AD) domain credentials before desktop initialization.
+- **Interface Granularity**: The taskbar and start menu house distinct sections for app shortcuts, system state controls, active process tracking, and background services.
+- **RDP Constraints**: Establishing an active Remote Desktop Protocol (RDP) session imposes operational safety locks that disable specific visual and display adjustments.
+
+## What I Learned
+
+- Right-clicking the base desktop canvas reveals advanced layout, screen resolution, and personalization sub-menus.
+- The modern Start Menu structures installed applications alphabetically while isolating user profile, session, and power controls.
+- Active system processes display thumbnail previews directly within the Taskbar boundary when hovered over.
+- The Notification Area serves as a quick-access tracking dock for critical system metrics like date, volume, network state, and service flags.
+
+---
+
+# Task 3 – Introduction to Windows
+
+## Objective
+
+Initialize and authenticate into a dedicated target Windows node safely via secure remote access architectures.
+
+## Key Concepts
+
+- **Remote Management Protocol**: Utilizing structural remote tools allows system administrators and security analysts to interact with full graphical system deployments hosted in external cloud boundaries.
+- **Cryptographic Trust Exceptions**: Accepting security certificates during initialization establishes an encrypted session over the network to prevent standard eavesdropping.
+
+## What I Learned
+
+- How to pivot from local browser interfaces directly into automated operational targets using valid administrative user credentials.
+- The operational requirement of allowing system background scripts time to baseline and fully provision upon the first login.
+
+---
+
+# Task 4 – The File System
+
+## Objective
+
+Examine the architectural design, access mechanics, and cryptographic attributes of the Windows file storage system.
+
+## Key Concepts
+
+- **Journaling Fault Tolerance**: NTFS uses automated transaction logging to dynamically repair disk structures following unexpected system crashes.
+- **Granular Access Matrices**: The Security tab exposes explicit permissions (e.g., Full Control, Modify, Read & Execute) assigned to explicit groups or users.
+- **Steganographic Evasion (ADS)**: Alternate Data Streams permit files to bind multiple raw `$DATA` streams, leaving secondary streams invisible to default file managers.
+
+## What I Learned
+
+- NTFS removes the 4GB file size constraints found in legacy formats like FAT32.
+- Web browsers append distinct zone identifiers to an asset's alternate data stream to tag it as an untrusted Internet download.
+- Security teams audit file properties via standard OS tabs to identify access configurations and potential permission inheritance issues.
+
+---
+
+# Task 5 – The Windows\System32 Folders
+
+## Objective
+
+Locate critical system directories and utilize system variables to safely navigate underlying OS assets.
+
+## Key Concepts
+
+- **Path Environment Variable Mapping**: System environment variables hold global operating parameters, ensuring files can be referenced seamlessly regardless of their exact physical disk drive.
+- **Core OS Integrity**: The `System32` directory functions as the central storage repository for critical executables, drivers, and libraries necessary to boot and run the OS.
+
+## What I Learned
+
+- The explicit macro `%windir%` routes directly to the active root operating system folder path.
+- Altering, moving, or deleting components within `System32` can destabilize the operating kernel and induce system failures.
+- Most built-in administrative tools and security command utilities reside inside the `System32` subfolder architecture.
+
+---
+
+# Task 6 – User Accounts, Profiles, and Permissions
+
+## Objective
+
+Manage local identities, distinguish permission models between account archetypes, and evaluate structural profile generation workflows.
+
+## Key Concepts
+
+- **Account Type Restrictions**: Administrators hold unfettered systemic control, whereas Standard Users operate restricted sessions barred from executing system-wide modifications.
+- **Permission Inheritance**: Users placed into local groups inherit all access permissions bound to that specific group container.
+- **Profile Standardization**: The system instantiates user profile folders within `C:\Users\` sequentially during an account's initial authentication routine.
+
+## Commands Used
+
+```bash
+# Run dialog box input shortcut to launch the Local Users and Groups management snap-in
+lusrmgr.msc
+```
+
+## What I Learned
+
+- The Run dialog box (`Win + R`) combined with `lusrmgr.msc` provides rapid access to the Local Users and Groups management console.
+- Audited a standard local user account named `tryhackmebilly`, identifying its membership inside the `Users` and `Remote Desktop Users` security groups.
+- Discovered a customized system account description containing a hidden complexity format string (`window$Fun1!`).
+
+---
+
+# Task 7 – User Account Control
+
+## Objective
+
+Analyze the isolation mechanics of User Account Control (UAC) and its role in minimizing privilege escalation risks.
+
+## Key Concepts
+
+- **Least Privilege Enforcement**: Running an administrative account with standard non-elevated tokens prevents malware from automatically inheriting high-integrity execution bounds.
+- **Security Boundary Demarcation**: Windows explicitly overlays a distinctive shield icon on installers or binaries that demand credential elevation or explicit administrative approval.
+
+## What I Learned
+
+- By default, standard User Account Control prompts do not apply to the built-in local administrator account.
+- When an operation requires elevated tokens under a standard user account, UAC isolates the prompt and demands valid administrator credentials to proceed.
+- If a UAC prompt is ignored or denied, Windows terminates the target installation stream to protect systemic integrity.
+
+---
+
+# Task 8 – Settings and the Control Panel
+
+## Objective
+
+Contrast the application of the modern Settings app against the legacy Control Panel interface when performing configuration changes.
+
+## Key Concepts
+
+- **Interface Convergence**: Modern Windows architecture links the touch-friendly Settings menu with legacy Control Panel applets, often redirecting users during deep network or device adjustments.
+- **Software Validation Baselines**: The Programs and Features control panel displays publisher validation data and explicit installation lists to trace third-party programs.
+
+## What I Learned
+
+- The legacy Control Panel handles complex hardware configurations and legacy features, whereas Settings hosts primary user choices like desktop wallpapers.
+- Changing the Control Panel view layout to Small Icons exposes hidden system utility pathways alphabetically.
+- Identified the final listing in the consolidated small icon grid as the built-in host perimeter defender utility (`Windows Defender Firewall`).
+
+---
+
+# Task 9 – Task Manager
+
+## Objective
+
+Monitor active system workflows, trace processing metrics, and inspect running applications through execution analysis tools.
+
+## Key Concepts
+
+- **Process Telemetry Visualization**: The Performance layer tracks active hardware metrics, documenting real-time CPU capacity bounds and physical RAM ingestion rates.
+- **Simple vs. Extended Analysis**: Simple views isolate basic user applications, whereas expanding the interface into More Details targets systemic background handles.
+
+## Commands Used
+
+```bash
+# Hotkey shortcut sequence used to invoke the system task tracking window instantly
+Ctrl + Shift + Esc
+```
+
+## What I Learned
+
+- Right-clicking the base Taskbar gives immediate operational access to active runtime diagnostic parameters.
+- Press the `Ctrl + Shift + Esc` keyboard macro combination to trigger the monitoring interface without passing intermediate menus.
+- Terminating stray processes through this utility protects active host computing resource pools from exhaustion attacks.
+
+---
+
+# Task 10 – Conclusions, Summaries & Next Steps
+
+## Objective
+
+Consolidate basic system architecture frameworks and establish a clear progression pathway toward advanced OS hardening.
+
+## What I Learned
+
+- Foundational navigation models transition directly into complex administrative capabilities like Group Policy audits and firewall rule generation.
+- Terminating target deployment machine allocations instantly following laboratory data collection limits platform resource consumption.
+
+---
+
+# Overall Takeaways
+
+- **Security Demarcation**: Advanced data protection mechanisms like full disk encryption require the baseline administrative architectures found only within Pro or Enterprise editions.
+- **Infrastructure Standardization**: Understanding the core differences between historical consumer builds and underlying server architectures is necessary for effective security logging and baseline audits.
+- **Interface Control**: Mastering context-specific menus allows administrators to quickly adapt workspace layouts and isolate active background services.
+- **Deep Storage Auditing**: File system visibility extends past raw names; checking alternate data streams and explicit security permissions is vital to hunting malicious persistence.
+- **Privilege Separation Rules**: Splitting day-to-day work into low-integrity standard sessions backed by active UAC checkpoints drastically neutralizes automatic exploit vectors.
+- **Consolidated Administration Baselines**: Identifying application installation versions via classic panel configurations remains primary to recognizing illicit application deployments.
+- **Real-time Diagnostic Muscle**: Mastering keyboard shortcuts like the process engine launcher enables lightning-fast containment operations during host defense analysis.
+
+---
+
+# Technical Debrief & Lessons Learned
+
+### Lab Execution Flow
+- Initialized the target training node using the primary cloud deployment interface.
+- Verified system deployment settings through the default System Information administrative dashboard.
+- Evaluated cryptographic access matrices between commercial and residential product lines.
+- Interfaced with the Taskbar configuration panel to modify search and utility button visibility parameters.
+- Audited the status flags of active tracking modules housed inside the system Action Center.
+- Established a secure cryptographic handshake with the virtual target machine to open an active terminal workspace.
+- Audited the NTFS file permissions layout for standard system users on core installation directories.
+- Utilized environmental macro shorthand values within path navigation entries to access core system file trees.
+- Leveraged the `lusrmgr.msc` snap-in to map local user group layouts and extract specific database metadata parameters.
+- Simulated standard user deployment paths to observe cryptographic token request traps enforced by active User Account Control rules.
+- Manipulated the layout matrices of the centralized Control Panel assembly, navigating past adapter setting adjustments to evaluate granular layout properties.
+- Isolated the host defensive baseline index value (`Windows Defender Firewall`) under an expanded sorting scheme.
+- Discovered telemetry shortcut mappings (`Ctrl + Shift + Esc`) to initialize active environment trace windows.
+- Terminated the learning node instance safely upon verifying structural baseline captures.
+
+### Action Points
+- Enforce strict local group access policies to minimize Remote Desktop visibility risks across unauthorized user accounts.
+- Monitor execution indicators such as UAC shield overrides before running unverified utility bundles.
+- Regularly leverage Control Panel diagnostic configurations over simplified touch interfaces when auditing security controls.
+- Utilize runtime task managers to trace resource depletion or isolate suspicious processing engines.
+
+### References
+- TryHackMe Windows Fundamentals Training Room Series
+- Microsoft Windows Administrative Utility & Operations Documentation
+
+---
+
+> **Note:** This document contains my personal learning notes and summaries. It does not include room answers, flags, or copyrighted walkthrough content.
