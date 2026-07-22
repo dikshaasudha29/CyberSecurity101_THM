@@ -1,0 +1,315 @@
+# Windows Fundamentals 2
+
+> **Room:** Windows Fundamentals 2  
+> **Learning Path:** Cyber Security 101 / Windows and AD Fundamentals
+
+---
+
+# Room Objective
+
+Master essential built-in Windows administrative utilities, system configuration options, User Account Control (UAC) security thresholds, process and resource monitoring, command-line diagnostics, and the central system registry.
+
+---
+
+# Skills Learned
+
+- Advanced System & Startup Configuration
+- User Account Control (UAC) Security Adjustment
+- System Auditing & Event Viewer Log Analysis
+- Real-Time Resource & Process Monitoring
+- Command-Line Network & Host Triage (`cmd`)
+- Windows Registry Database Navigation
+
+---
+
+# Tools Used
+
+- **System Configuration**: `msconfig`
+- **Computer Management**: `compmgmt.msc`
+- **User Account Control Settings**: `UserAccountControlSettings.exe`
+- **System Information**: `msinfo32.exe`
+- **Resource Monitor**: `resmon.exe`
+- **Command Prompt**: `cmd.exe`
+- **Registry Editor**: `regedit.exe`
+- **Auxiliary Snap-ins**: `services.msc`, `diskmgmt.msc`, `lusrmgr.msc`, `perfmon.exe`
+
+---
+
+# Task 1 – Introduction
+
+## Objective
+
+Initialize and deploy a Windows Server target environment to explore administrative tools via Remote Desktop Protocol (RDP) or AttackBox.
+
+## Key Concepts
+
+- **Remote Systems Management**: Interacting with Windows Server environments remotely using standard administrative credentials over RDP (Port 3389).
+
+## Commands Used
+
+```cmd
+# Connect to target Windows instance via RDP (Linux client example)
+xfreerdp /v:10.49.156.207 /u:administrator /p:letmein123!
+```
+
+## What I Learned
+Windows Server instances share core architectural tools with desktop builds but handle administrative features (like user startup workflows) differently.
+
+---
+
+# Task 2 – System Configuration and Advanced System Settings
+
+## Objective
+Configure system startup behaviors, manage page file memory allocations, and audit crash dump generation settings using msconfig and Advanced System Settings.
+
+## Key Concepts
+MSConfig Utility Tabs:
+
+- **General**: Selects boot modes (Normal, Diagnostic, Selective).
+- **Boot**: Defines OS boot parameters and Safe Boot options.
+- **Services**: Lists all background services and their operational states.
+- **Startup**: Redirects to Task Manager (client OS) or Startup folder (Server OS).
+- **Tools**: Direct launcher for core administrative tools with associated run commands.
+
+**Server Startup Handling**: Windows Server relies on the Startup folder (shell:startup) rather than Task Manager for user-level startup shortcuts.
+
+**Virtual Memory (Page File)**: Serves as secondary memory space on disk to prevent system crashes during RAM exhaustion.
+
+**Crash Dumps**: Configures Blue Screen of Death (BSOD) memory state capture levels (Kernel, Complete, Small/256KB, Automatic) for post-mortem debugging.
+
+## Commands Used
+```cmd
+# Launch the System Configuration utility
+msconfig
+
+# Open the user Startup directory in Windows Explorer / Run Dialog
+shell:startup
+
+# Direct shortcut to Advanced System Properties
+sysdm.cpl
+```
+
+## What I Learned
+msconfig is designed primarily for diagnostic troubleshooting rather than persistent startup program management.
+
+Inspecting crash dump configurations ensures proper forensic artifacts are generated following system failures.
+
+---
+
+# Task 3 – Change UAC Settings
+
+## Objective
+Analyze User Account Control (UAC) enforcement levels and evaluate security trade-offs across alert thresholds.
+
+## Key Concepts
+UAC Alert Thresholds:
+
+- **Always Notify**: Maximum protection; prompts on all configuration changes and dims the screen (Secure Desktop).
+- **Notify for Apps (Default)**: Prompts only when applications attempt system modifications; does not prompt for user actions.
+- **Notify without Dimming**: Same as default, but bypasses the isolated Secure Desktop background.
+- **Never Notify**: Disables UAC security prompts entirely (high security risk).
+
+## Commands Used
+```cmd
+# Launch User Account Control configuration slider window
+UserAccountControlSettings.exe
+```
+
+## What I Learned
+Lowering UAC thresholds exposes systems to silent background execution by unauthorized scripts or installers.
+
+---
+
+# Task 4 – Computer Management
+
+## Objective
+Navigate the consolidated compmgmt.msc snap-in to inspect scheduled tasks, audit logs, file shares, system performance, storage disks, and background services.
+
+## Key Concepts
+- **Task Scheduler**: Controls automated task execution based on triggers (e.g., system boot, explicit schedules, logons).
+- **Event Viewer**: Centralized logging system structured around three main operational panes:
+  - **Event Types**: Error, Warning, Information, Success Audit, Failure Audit.
+  - **Standard Logs**: Application, Security, Setup, System, Forwarded Events.
+- **Shared Folders**: Lists active file shares, active user sessions, and open files. Includes default hidden administrative shares (C$, ADMIN$).
+- **Services & Applications**: Manages persistent background tasks and WMI interfaces.
+  - **Startup Types**: Automatic, Manual, Disabled.
+
+## Commands Used
+```cmd
+# Open the primary Computer Management snap-in
+compmgmt.msc
+
+# Direct shortcuts to individual Computer Management modules
+services.msc      # Services Manager
+diskmgmt.msc      # Disk Management
+lusrmgr.msc       # Local Users and Groups
+perfmon.exe       # Performance Monitor
+```
+
+## What I Learned
+Scheduled tasks and service startup properties are key areas to inspect when auditing persistent background programs.
+
+Default administrative shares (C$, ADMIN$) enable remote management but must be monitored for unauthorized lateral movement.
+
+---
+
+# Task 5 – System Information
+
+## Objective
+Extract granular technical specifications, installed components, and operating environment parameters using msinfo32.
+
+## Key Concepts
+Msinfo32 Categories:
+
+- **Hardware Resources**: Low-level hardware data (IRQs, DMA, I/O ports).
+- **Components**: Hardware device specifics (Display, Storage, Network, Input).
+- **Software Environment**: OS details, running tasks, startup programs, network connections, and environment variables.
+- **Environment Variables**: System-wide configuration variables (e.g., %WINDIR% for OS location, %ComSpec% for default command processor path).
+
+## Commands Used
+```cmd
+# Launch Microsoft System Information overview tool
+msinfo32.exe
+```
+
+## What I Learned
+msinfo32 provides a fast way to gather host specs, network connection states, and environment variable paths without navigating multiple Control Panel menus.
+
+---
+
+# Task 6 – Resource Monitor
+
+## Objective
+Perform real-time diagnostics on system resource consumption, process handle locks, and active network sockets.
+
+## Key Concepts
+Resmon Telemetry:
+
+- **CPU**: Tracks active threads, process usage, and CPU capacity utilization.
+- **Memory**: Displays physical RAM allocation (In Use, Modified, Standby, Free).
+- **Disk**: Shows per-process I/O read/write operations and active disk queue depths.
+- **Network**: Displays active TCP connections, listening ports, and per-process bandwidth consumption.
+
+**Process Troubleshooting**: Allows identification of locked files, handle dependencies, and deadlocked threads.
+
+## Commands Used
+```cmd
+# Open Resource Monitor interface directly
+resmon.exe
+```
+
+## What I Learned
+Unlike standard Task Manager, Resource Monitor exposes individual file handles, associated DLL modules, and remote IP socket bindings per process.
+
+---
+
+# Task 7 – Command Prompt
+
+## Objective
+Execute fundamental command-line utilities for local host identification, IP configuration, and active connection analysis.
+
+## Key Concepts
+- **CLI Help Interfaces**: Appending /? (or executing net help for net utilities) displays full syntax structures and argument flags.
+- **Network Diagnostic Utilities**:
+  - **ipconfig**: Displays IP addresses, subnet masks, and default gateways.
+  - **netstat**: Audits active network sockets and protocol statistics.
+  - **net**: Command suite for managing local users, groups, shares, and network connections.
+
+## Commands Used
+```cmd
+# Output hostname of the active system
+hostname
+
+# Display currently logged-in user context
+whoami
+
+# Query network configuration details
+ipconfig
+ipconfig /all
+ipconfig /?
+
+# Display active TCP connections and network statistics
+netstat
+
+# Clear command prompt window screen buffer
+cls
+
+# Query net command syntax manual
+net help
+net help user
+```
+
+## What I Learned
+Command-line interfaces allow rapid host triage and network verification without relying on visual GUI menus.
+
+---
+
+# Task 8 – Registry Editor
+
+## Objective
+Understand the structure and administrative role of the central Windows Registry database.
+
+## Key Concepts
+- **Windows Registry**: Hierarchical database storing configuration settings for OS components, hardware drivers, user preferences, and installed software.
+- **Registry Hives**: Standard top-level organizational trees storing configuration keys and values:
+  - **HKEY_LOCAL_MACHINE (HKLM)**: System-wide hardware and software settings.
+  - **HKEY_CURRENT_USER (HKCU)**: Settings specific to the currently logged-in account.
+  - **HKEY_USERS (HKU)**: Profiles for all loaded user accounts.
+  - **HKEY_CLASSES_ROOT (HKCR)**: File associations and COM object registration.
+  - **HKEY_CURRENT_CONFIG (HKCC)**: Hardware profile details gathered at boot.
+
+## Commands Used
+```cmd
+# Launch Windows Registry Editor
+regedit.exe
+```
+
+## What I Learned
+The registry acts as the single source of truth for OS configurations; incorrect modifications can impact core system stability.
+
+---
+
+# Task 9 – Conclusion
+
+## Objective
+Synthesize administrative shortcuts and direct run tools to build efficient system investigation routines.
+
+## What I Learned
+Built-in utilities can be launched directly via run line executable names (.exe / .msc), bypassing the msconfig GUI menu for faster access.
+
+## Overall Takeaways
+- **Centralized vs. Modular Management**: Utilities like msconfig and compmgmt.msc serve as administrative hubs, but individual tools (services.msc, resmon.exe, regedit.exe) can be called directly for targeted troubleshooting.
+- **Visibility and Auditability**: Windows built-in tools (Event Viewer, Resource Monitor, System Information) provide sufficient native telemetry to detect system issues and analyze active operations.
+- **Privilege Consciousness**: Administrative capabilities—such as editing registry keys, modifying service states, or disabling UAC—require local administrator privileges.
+
+## Technical Debrief & Lessons Learned
+
+### Lab Execution Flow
+1. Connected to target Windows Server instance via RDP.
+2. Verified local user context using `whoami` and system name via `hostname`.
+3. Checked OS configuration and service states in `msconfig`.
+4. Evaluated event logging, task schedules, and administrative shares inside `compmgmt.msc`.
+5. Monitored real-time system performance and network socket bindings via `resmon.exe`.
+6. Inspected system hives and keys using `regedit.exe`.
+
+### Key Diagnostic Quick Reference
+
+| Utility | Direct Command | Primary Use Case |
+| :--- | :--- | :--- |
+| System Configuration | msconfig | Diagnostic boot selection and administrative tools launcher |
+| Computer Management | compmgmt.msc | Centralized interface for tasks, events, shares, and disks |
+| System Information | msinfo32.exe | Comprehensive hardware, component, and OS profile snapshot |
+| Resource Monitor | resmon.exe | Real-time process handles, memory pools, disk I/O, and socket audits |
+| Registry Editor | regedit.exe | Hierarchical database configuration viewer and modifier |
+| UAC Settings | UserAccountControlSettings.exe | Security notification threshold slider control |
+
+### Action Points
+* Memorize core .msc and .exe direct run aliases to streamline incident response workflows.
+* Always check `shell:startup` when analyzing user-level autostart programs on Windows Server editions.
+* Use `resmon.exe` alongside `netstat` to quickly associate unexpected network traffic with specific Process IDs (PIDs).
+
+### References
+* Microsoft Technical Documentation: System Configuration Utility
+* Microsoft Technical Documentation: Windows Registry Overview
+
+*Note: This document contains my personal learning notes and summaries. It does not include room answers, flags, or copyrighted walkthrough content.*
